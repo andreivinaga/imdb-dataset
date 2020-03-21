@@ -1,6 +1,6 @@
 {
   "name": "imdb-dataset",
-  "version": "0.0.5RC",
+  "version": "1.0.0",
   "description": "Parse data coming from https://www.imdb.com/interfaces/",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
