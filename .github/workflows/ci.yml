@@ -1,11 +1,11 @@
-name: Tests
+name: CI
 # This workflow is triggered on pushes to the repository.
 on: [push]
 
 jobs:
   build:
     # Job name is Greeting
-    name: Testing
+    name: Testing & Publish
     # This job runs on Linux
     runs-on: ubuntu-latest
 
@@ -19,7 +19,8 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm run test
-      - run: npm test
       - name: Publish
-        run: echo '123'
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npm publish
+#        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}

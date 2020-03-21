@@ -1,6 +1,6 @@
 {
   "name": "imdb-dataset",
-  "version": "1.0.0",
+  "version": "0.0.5RC",
   "description": "Parse data coming from https://www.imdb.com/interfaces/",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,7 +14,10 @@
     "url": "git+https://github.com/andreivinaga/imdb-dataset.git"
   },
   "keywords": [
-    "imdb"
+    "imdb",
+    "tsv",
+    "parser",
+    "movie"
   ],
   "author": "andreivinaga",
   "license": "MIT",
