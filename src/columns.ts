@@ -62,7 +62,7 @@ export const mappedTitleBasic: IMappedTypes[] = [
   },
   {
     column: 'isAdult',
-    parser: Boolean,
+    parser: (input) => input === '1',
   },
   {
     column: 'startYear',
