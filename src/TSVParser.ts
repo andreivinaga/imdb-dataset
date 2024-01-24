@@ -11,27 +11,29 @@ export enum IteratorState {
   WORKING,
 }
 
-export interface ITSVParserOptions<T> {
+interface ITSVParserOptions<T> {
   model?: Model<T>;
   columns?: IMappedTypes[];
-  filePath: string;
 }
+
+type FileOptions = { filePath: string };
+type StreamOptions = { stream: NodeJS.ReadableStream };
+
+export type TSVParserOptions<T> = ITSVParserOptions<T> & (FileOptions | StreamOptions);
 
 export class TSVParser<T> implements AsyncIterable<T> {
 
-  private stream: MapStream;
+  private stream: es.MapStream;
   private lines: T[] = [];
   private maxLines = 100;
   private state: IteratorState = IteratorState.NA;
 
   private model: Model<T>;
 
-  constructor(options: ITSVParserOptions<T>) {
-    const { filePath, model, columns } = options;
-
-    if (!existsSync(filePath)) {
-      throw new Error(`Cannot find file at path: ${filePath}`);
-    }
+  constructor(options: TSVParserOptions<T>) {
+    const { model, columns} = options;
+    const filePath = (options as FileOptions).filePath || undefined;
+    let stream = (options as StreamOptions).stream || undefined;
 
     if (!model) {
       if (!columns) {
@@ -42,9 +44,19 @@ export class TSVParser<T> implements AsyncIterable<T> {
       this.model = model;
     }
 
+    if (filePath) {
+      if (!existsSync(filePath)) {
+        throw new Error(`Cannot find file at path: ${ filePath }`);
+      }
+
+      stream = createReadStream(filePath);
+    } else if (!stream) {
+      throw new Error('Either a file path or a stream must be specified');
+    }
+
     this.state = IteratorState.WORKING;
 
-    this.stream = createReadStream(filePath)
+    this.stream = stream
       .pipe(es.split())
       .pipe(this.onLine)
       .on('close', () => {
