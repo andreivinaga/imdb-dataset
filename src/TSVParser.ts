@@ -1,4 +1,4 @@
-import { default as es, MapStream } from 'event-stream';
+import * as es from 'event-stream';
 import { createReadStream, existsSync } from 'fs';
 
 import { sleep } from './util';
